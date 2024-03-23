@@ -25,30 +25,34 @@ class DBStorage:
         host = getenv("HBNB_MYSQL_HOST")
         env = getenv("HBNB_ENV")
 
-        self.__engine = createengine('mysql+mysqldb://{}:{}@{}/{}'
-                .format(user, passwd, host, db), pool_pre_ping=True)
+        self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'
+                                      .format(user, passwd, host, db),
+                                      pool_pre_ping=True)
 
         if env == "test":
-            Base.metdata.drop_all(self.__engine)
+            Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
-        """Retun a dictionary"""
-        d_ctionary = {}
+        """returns a dictionary
+        Return:
+            returns a dictionary of __object
+        """
+        dic = {}
         if cls:
             if type(cls) is str:
                 cls = eval(cls)
-                querry = self.__session.querry(cls)
-                for element in querry:
-                    key = "{}.{}".format(type(element).__name__, element.id)
-                    d_ctionary[key] = element
-                else:
-                    l_ist = [State, city, User, Place, Review, Amenity]
-                    for case in l_ist:
-                        querry = self.__session.query(case)
-                        for element in querry:
-                            key = "{}.{}".format(type(element).__name__, element.id)
-                            d_ctionary[key] = element
-                return (d_ctionary)
+            query = self.__session.query(cls)
+            for elem in query:
+                key = "{}.{}".format(type(elem).__name__, elem.id)
+                dic[key] = elem
+        else:
+            lista = [State, City, User, Place, Review, Amenity]
+            for clase in lista:
+                query = self.__session.query(clase)
+                for elem in query:
+                    key = "{}.{}".format(type(elem).__name__, elem.id)
+                    dic[key] = elem
+        return (dic)
 
     def new(self, obj):
         """add a new element in the table
@@ -67,13 +71,14 @@ class DBStorage:
             self.session.delete(obj)
 
     def reload(self):
-        """Configuration"""
+        """configuration
+        """
         Base.metadata.create_all(self.__engine)
-        s = sessionmaker(bind=self.__engine, expire_on_commit=False)
-        session = scoped_session(s)
-        self.__session = session()
+        sec = sessionmaker(bind=self.__engine, expire_on_commit=False)
+        Session = scoped_session(sec)
+        self.__session = Session()
 
     def close(self):
-        """Call remove"""
+        """ calls remove()
+        """
         self.__session.close()
-
