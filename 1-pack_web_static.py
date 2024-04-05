@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/python3
 """
 script that generates a .tgz archive from the contents 
 """
