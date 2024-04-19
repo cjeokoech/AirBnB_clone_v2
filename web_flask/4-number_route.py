@@ -34,9 +34,9 @@ def python_text(text='is cool'):
     text = text.replace('_', ' ')
     return 'Python {}'.format(text)
 
-app.route('/number/<int:n>')
-def n_number(n):
-    """ if n is a number display"""
+@app.route('/number/<int:n>')
+def number_text(n):
+    """ replace with int only if given int. """
     n = str(n)
     return '{} is a number'.format(n)
 
