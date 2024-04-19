@@ -1,28 +1,36 @@
 #!/usr/bin/python3
-"""Script to start flask application"""
+""" 3. Add third view func that redirects and has default val for variable """
+
+from flask import Flask
+
 
 app = Flask(__name__)
+app.url_map.strict_slashes = False
 
-app.route('/', strict_slashes=False)
-def root():
-    """Display text"""
+
+@app.route('/')
+def hello_world():
+    """ Returns some text. """
     return 'Hello HBNB!'
 
-app.route('/hbnb', strick_slashes=False)
-def hbnb():
-    """Diplay text"""
+
+@app.route('/hbnb')
+def hello():
+    """ Return other text. """
     return 'HBNB'
 
-app.route('/c/<text>', strict_slashes=False)
-def text():
-    """Display text"""
-    t_text = text.replace('_', ' ')
-    return 'C {}'.format(t_text)
 
-app.route('/python/', strict_slashes=False)
-app.route('/python/<text>', strict_slashes=False)
-def python(text='s cool'):
-    """Diplay text"""
+@app.route('/c/<text>')
+def c_text(text):
+    """ replace text with variable. """
+    text = text.replace('_', ' ')
+    return 'C {}'.format(text)
+
+
+@app.route('/python/')
+@app.route('/python/<text>')
+def python_text(text='is cool'):
+    """ replace more text with another variable. """
     text = text.replace('_', ' ')
     return 'Python {}'.format(text)
 
