@@ -41,6 +41,12 @@ def number_text(n):
     n = str(n)
     return '{} is a number'.format(n)
 
+@app.route('/number_template/<int:n>')
+def html(n):
+    """display html if n is int"""
+    n = str(n)
+    return render_template('5-number.html', n=n)
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
